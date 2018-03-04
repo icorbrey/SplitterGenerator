@@ -54,18 +54,17 @@ namespace SplitterGenerator
                     OutputRatios.Add(PromptForInt("Ratio for Belt " + (i + 1) + ":"));
                 }
 
+                // Reduce the ratios based on their GCD
+                int factor = Util.GCD(OutputRatios);
+                for(int i = 0; i < OutputRatios.Count; i++)
+                {
+                    OutputRatios[i] /= factor;
+                }
+
                 // Find how many splitter levels will be required for the ratios given
                 int TotalRatioValue = OutputRatios.Sum();
                 int SplitterLevels = 0;
                 while (Math.Pow(2, SplitterLevels) < TotalRatioValue) SplitterLevels++;
-
-                if (SplitterLevels > 6) Console.Write("\nWARNING: This is going to be a REALLY big splitter, proceed anyway? [y/N] ");
-
-                switch(Console.ReadKey().Key)
-                {
-                    case ConsoleKey.Y: break;
-                    default: goto input;
-                }
 
                 // Generate list of flags for final splitter row
                 List<int> flags = new List<int>();
@@ -145,6 +144,12 @@ namespace SplitterGenerator
             }
             while (PromptForLoop());
         }
+    }
+
+    class Util
+    {
+        public static int GCD(List<int> numbers) => numbers.Aggregate(GCD);
+        private static int GCD(int x, int y) => y == 0 ? x : GCD(y, x % y);
     }
 
     class Splitter
