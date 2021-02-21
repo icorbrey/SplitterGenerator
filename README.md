@@ -1,4 +1,9 @@
+**Author's Note**: If you happen to stumble across this repository, I am terribly sorry. I do not maintain this code anymore; in fact, I'm not sure I cared about it after about 3 days. People have starred it, so maybe they actually like it, so it stays up. Venture forth at your own risk, as this was made by 2018 me who knew nothing about legitimate software development. Good luck.
+
+---
+
 # SplitterGenerator
+
 A simple program that generates specific ratio splitters for Factorio!
 
 ## Usage
