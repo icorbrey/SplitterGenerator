@@ -19,7 +19,7 @@ namespace SplitterGenerator
         }
         static int PromptForInt(string prompt)
         {
-            while(true)
+            while (true)
             {
                 try
                 {
@@ -41,7 +41,7 @@ namespace SplitterGenerator
             {
                 Console.Clear();
 
-                input:
+            input:
 
                 // Get the number of output belts
                 int NumberOfOutputs = PromptForInt("How many output belts should there be?");
@@ -56,7 +56,7 @@ namespace SplitterGenerator
 
                 // Reduce the ratios based on their GCD
                 int factor = Util.GCD(OutputRatios);
-                for(int i = 0; i < OutputRatios.Count; i++)
+                for (int i = 0; i < OutputRatios.Count; i++)
                 {
                     OutputRatios[i] /= factor;
                 }
@@ -107,7 +107,7 @@ namespace SplitterGenerator
                 void PrintTree(Splitter splitter, int lvl)
                 {
                     if (lvl == PrintLevels.Count) PrintLevels.Add("");
-                    
+
                     string midSpace = "";
                     for (int i = 0; i < Math.Pow(2, SplitterLevels - lvl + 1) - 1; i++) midSpace += " ";
 
@@ -128,8 +128,8 @@ namespace SplitterGenerator
                     }
                 }
                 PrintTree(SplitterTree, 0);
-                
-                for(int i = 1; i < PrintLevels.Count; i++)
+
+                for (int i = 1; i < PrintLevels.Count; i++)
                 {
                     string startingSpace = "";
                     for (int j = 0; j < Math.Pow(2, i) - 1; j++) startingSpace += " ";
@@ -171,7 +171,7 @@ namespace SplitterGenerator
         public Splitter(int levels)
         {
             if (levels != 0)
-                for(int i = 0; i < 2; i++)
+                for (int i = 0; i < 2; i++)
                     Outputs[i] = new Splitter(levels - 1);
         }
         #endregion
@@ -193,23 +193,42 @@ namespace SplitterGenerator
 
             return counter;
         }
+
+        private Dictionary<int, int> buildFlagHistogram(List<int> flags)
+        {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            foreach (var flag in flags)
+            {
+                if (dict.ContainsKey(flag))
+                    dict[flag]++;
+                else dict[flag] = 1;
+            }
+
+            return dict;
+
+        }
+
         private List<int> SortFlags(List<int> flags)
         {
+
+            Dictionary<int, int> flagHistogram = buildFlagHistogram(flags);
+            List<int> sortedFlags = new List<int>();
             List<int> odds = new List<int>();
             List<int> evens = new List<int>();
 
-            foreach(int flag in flags)
+            foreach (var flag in flagHistogram.Keys)
             {
-                if (flag % 2 == 0) evens.Add(flag);
-                else odds.Add(flag);
+                for (int i = 0; i < flagHistogram[flag]; ++i)
+                    if (flagHistogram[flag] % 2 == 0)
+                        evens.Add(flag);
+                    else
+                        odds.Add(flag);
             }
 
             odds.Sort();
-            odds.Reverse();
             evens.Sort();
-            evens.Reverse();
 
-            List<int> sortedFlags = new List<int>();
 
             sortedFlags.AddRange(evens);
             sortedFlags.AddRange(odds);
